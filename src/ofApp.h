@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "ofMain.h"
+#include <ofxButton.h>
 #include "game.h"
 
 class ofApp : public ofBaseApp{
@@ -17,6 +18,10 @@ class ofApp : public ofBaseApp{
 		void setup();
 		void update();
 		void draw();
+		void drawTitle();
+		void drawScore();
+		void drawBoard();
+		void drawDescription();
 
 		void keyPressed(int key);
 		void keyReleased(int key);
@@ -29,5 +34,4 @@ class ofApp : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
-		
 };

@@ -17,6 +17,8 @@ public:
 	int score;
 public:
 	Game();
+	
+	void restart();
 
 	// Makes a one step of a game given input
 	void step(char& input);

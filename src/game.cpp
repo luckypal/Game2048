@@ -11,6 +11,21 @@ Game::Game() : board{ 0 }, turn(1), score(0) {
 	add_new_tile();
 }
 
+void Game::restart() {
+	for (int i = 0; i < BSIZE; i++)
+		for (int j = 0; j < BSIZE; j++)
+			board[i][j] = 0;
+
+	turn = 1;
+	score = 0;
+
+	int i = rand() % BSIZE;
+	int j = rand() % BSIZE;
+	board[i][j] = 2;
+
+	add_new_tile();
+}
+
 void Game::step(char& input) {
 	bool valid_step = false; // to keep track if the board is changed
 

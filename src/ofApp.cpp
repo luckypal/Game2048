@@ -7,21 +7,16 @@
 #define COLOR_CELL_TEXT_WHITE 0xf9f6f2
 #define COLOR_CELL_FILL {0xeee4da, 0xede0c8, 0xf2b179, 0xf59563, 0xf67c5f, 0xf65e3b, 0xedcf72, 0xedcc61, 0xedc850, 0xedc53f, 0xedc22e};
 
-//ofColor(0xee, 0xe4, 0xda), /*2*/\
-//ofColor(0xee, 0xe4, 0xda), /*4*/\
-//ofColor(0xee, 0xe4, 0xda), /*8*/\
-//ofColor(0xee, 0xe4, 0xda), /*16*/\
-//ofColor(0xee, 0xe4, 0xda), /*32*/\
-//ofColor(0xee, 0xe4, 0xda), /*64*/\
-//ofColor(0xee, 0xe4, 0xda), /*128*/\
-//ofColor(0xee, 0xe4, 0xda), /*256*/\
-//ofColor(0xee, 0xe4, 0xda), /*512*/\
-//ofColor(0xee, 0xe4, 0xda), /*1024*/\
-//ofColor(0xee, 0xe4, 0xda)  /*2048*/}
-
-
+#define BOARD_IN_RATIO 0.7
+#define BOARD_TOP_RATIO 0.2
+#define BOARD_BOTTOM_RATIO 0.1
 #define BOARD_CELL_RATIO 0.1
 #define FONT_RATIO 3.2
+
+#define STRING_TITLE "2048"
+#define STRING_DESCRIPTION "How to play: Use your arrow keys to move the tiles. When \n\
+two tiles with the same number touch, they merge into one!\n\
+W, A, S, D: Arrow, R: Restart Game"
 
 ofColor getColorFromCode(int);
 ofColor getColorFromNumber(int);
@@ -39,16 +34,64 @@ void ofApp::update(){
 void ofApp::draw(){
 	ofBackground(COLOR_BACK);
 
+	drawTitle();
+	drawScore();
+
+	drawBoard();
+	drawDescription();
+}
+
+void ofApp::drawTitle() {
+	ofTrueTypeFont fontTitle;
+	fontTitle.load("arialbd.ttf", nBoardSize * 0.1);
+
+	ofSetColor(getColorFromCode(0x776e65));
+	string title = STRING_TITLE;
+	int fontWidth = fontTitle.stringWidth(title);
+	int fontHeight = fontTitle.stringHeight(title);
+	fontTitle.drawString(title, rectBoard.getLeft(), rectBoard.getTop() - nBoardSize * 0.05);
+}
+
+void ofApp::drawScore() {
+	double cellSize = nBoardSize / (BOARD_CELL_RATIO * (Game::BSIZE + (int)0x1) + Game::BSIZE);
+
+	ofTrueTypeFont fontTitle;
+	fontTitle.load("arialbd.ttf", cellSize / 4);
+
+	ofSetColor(getColorFromCode(0xbbada0));
+	char score[128] = { 0 };
+	sprintf(score, "SCORE: %d", game.get_score());
+
+	int fontWidth = fontTitle.stringWidth(score);
+	int fontHeight = fontTitle.stringHeight(score);
+	fontTitle.drawString(score, rectBoard.getRight() - fontWidth, rectBoard.getTop() - cellSize * 0.25);
+}
+
+void ofApp::drawDescription() {
+	double cellSize = nBoardSize / (BOARD_CELL_RATIO * (Game::BSIZE + (int)0x1) + Game::BSIZE);
+
+	ofTrueTypeFont fontTitle;
+	fontTitle.load("arial.ttf", nBoardSize * 0.029);
+
+	ofSetColor(getColorFromCode(0x776e65));
+	char description[256] = STRING_DESCRIPTION;
+
+	int fontWidth = fontTitle.stringWidth(description);
+	int fontHeight = fontTitle.stringHeight(description);
+	fontTitle.drawString(description, rectBoard.getLeft(), rectBoard.getBottom() + fontHeight / 2);
+}
+
+void ofApp::drawBoard() {
 	ofSetColor(COLOR_BOARD);
 	ofDrawRectangle(rectBoard);
 
-	double cellSize = nBoardSize / (BOARD_CELL_RATIO * (Game::BSIZE + 0x1) + Game::BSIZE);
+	double cellSize = nBoardSize / (BOARD_CELL_RATIO * (Game::BSIZE + (int)0x1) + Game::BSIZE);
 	double cellThick = cellSize * BOARD_CELL_RATIO;
 
 	ofRectangle rectInnerBoard(
-		rectBoard.getLeft() + cellThick, 
-		rectBoard.getTop() + cellThick, 
-		cellSize - cellThick * 2, 
+		rectBoard.getLeft() + cellThick,
+		rectBoard.getTop() + cellThick,
+		cellSize - cellThick * 2,
 		cellSize - cellThick * 2);
 
 	double fontHeight = cellSize / FONT_RATIO;
@@ -86,10 +129,13 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	if (key == 57357) key = 119;
-	if (key == 57359) key = 115;
-	if (key == 57356) key = 97;
-	if (key == 57358) key = 100;
+	switch (key) {
+	case 57357: key = 119; break;
+	case 57359: key = 115; break;
+	case 57356: key = 97; break;
+	case 57358: key = 100; break;
+	case 'r': game.restart(); return;
+	}
 
 	char input = key;
 	game.step(input);
@@ -134,7 +180,7 @@ void ofApp::mouseExited(int x, int y){
 void ofApp::windowResized(int w, int h){
 	nWidth = w;
 	nHeight = h;
-	nBoardSize = MIN(nWidth, nHeight) * 0.8;
+	nBoardSize = MIN(nWidth, nHeight) * BOARD_IN_RATIO;
 	int left = (nWidth - nBoardSize) / 2;
 	int top = (nHeight - nBoardSize) / 2;
 	rectBoard = ofRectangle(left, top, nBoardSize, nBoardSize);
