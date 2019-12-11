@@ -23,6 +23,9 @@ class ofApp : public ofBaseApp{
 		void drawBoard();
 		void drawDescription();
 
+		void drawFailure();
+		void drawSuccess();
+
 		void keyPressed(int key);
 		void keyReleased(int key);
 		void mouseMoved(int x, int y );

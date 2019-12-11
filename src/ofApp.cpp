@@ -6,6 +6,8 @@
 #define COLOR_CELL_TEXT ofColor(0x77, 0x6e, 0x65)
 #define COLOR_CELL_TEXT_WHITE 0xf9f6f2
 #define COLOR_CELL_FILL {0xeee4da, 0xede0c8, 0xf2b179, 0xf59563, 0xf67c5f, 0xf65e3b, 0xedcf72, 0xedcc61, 0xedc850, 0xedc53f, 0xedc22e};
+#define COLOR_BOARD_FAILURE	ofColor(0xbb, 0xad, 0xa0, 256 * 0.8)
+#define COLOR_BOARD_SUCCESS	ofColor(0xfa, 0xf8, 0xef, 256 * 0.8)
 
 #define BOARD_IN_RATIO 0.7
 #define BOARD_TOP_RATIO 0.2
@@ -39,6 +41,11 @@ void ofApp::draw(){
 
 	drawBoard();
 	drawDescription();
+
+	if (game.status == 1)
+		drawFailure();
+	else if (game.status == 2)
+		drawSuccess();
 }
 
 void ofApp::drawTitle() {
@@ -125,6 +132,38 @@ void ofApp::drawBoard() {
 			}
 		}
 	}
+}
+
+void ofApp::drawFailure() {
+	ofSetColor(COLOR_BOARD_FAILURE);
+	ofDrawRectangle(rectBoard);
+
+	ofSetColor(getColorFromCode(COLOR_CELL_TEXT_WHITE));
+	ofTrueTypeFont fontTitle;
+	fontTitle.load("arialbd.ttf", nBoardSize * 0.1);
+
+	string text = "FAILURE";
+	int fontWidth = fontTitle.stringWidth(text);
+	int fontHeight = fontTitle.stringHeight(text);
+	int centerH = (rectBoard.getLeft() + rectBoard.getRight()) / 2;
+	int centerV = (rectBoard.getTop() + rectBoard.getBottom()) / 2;
+	fontTitle.drawString(text, centerH - fontWidth / 2, centerV + fontHeight / 2);
+}
+
+void ofApp::drawSuccess() {
+	ofSetColor(COLOR_BOARD_SUCCESS);
+	ofDrawRectangle(rectBoard);
+
+	ofSetColor(getColorFromCode(0xedc53f));
+	ofTrueTypeFont fontTitle;
+	fontTitle.load("arialbd.ttf", nBoardSize * 0.1);
+
+	string text = "SUCCESS";
+	int fontWidth = fontTitle.stringWidth(text);
+	int fontHeight = fontTitle.stringHeight(text);
+	int centerH = (rectBoard.getLeft() + rectBoard.getRight()) / 2;
+	int centerV = (rectBoard.getTop() + rectBoard.getBottom()) / 2;
+	fontTitle.drawString(text, centerH - fontWidth / 2, centerV + fontHeight / 2);
 }
 
 //--------------------------------------------------------------

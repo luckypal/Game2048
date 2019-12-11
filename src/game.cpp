@@ -1,6 +1,6 @@
 #include "game.h"
 
-Game::Game() : board{ 0 }, turn(1), score(0) {
+Game::Game() : board{ 0 }, turn(1), score(0), status(0) {
 	// Settting random initial tiles
 	// First tile
 	int i = rand() % BSIZE;
@@ -18,6 +18,7 @@ void Game::restart() {
 
 	turn = 1;
 	score = 0;
+	status = 0;
 
 	int i = rand() % BSIZE;
 	int j = rand() % BSIZE;
@@ -27,6 +28,8 @@ void Game::restart() {
 }
 
 void Game::step(char& input) {
+	if (status) return;
+
 	bool valid_step = false; // to keep track if the board is changed
 
 	// VALID STEP ALGORITHM:
@@ -42,6 +45,11 @@ void Game::step(char& input) {
 		add_new_tile();
 		++turn;
 	}
+
+	if (check_win_status())
+		status = 2;
+	else if (check_fail_status())
+		status = 1;
 }
 
 bool Game::move(char& input, bool& valid_step) {
@@ -205,6 +213,23 @@ bool Game::check_win_status() {
 		}
 	}
 	return false;
+}
+
+bool Game::check_fail_status() {
+	for (int i = 0; i < BSIZE; ++i) {
+		for (int j = 0; j < BSIZE; ++j) {
+			if (board[i][j] == 0) {
+				return false;
+			}
+			if (i != BSIZE - 1 && board[i][j] == board[i + 1][j]) {
+				return false;
+			}
+			if (j != BSIZE - 1 && board[i][j] == board[i][j + 1]) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 int Game::get_score() {

@@ -15,6 +15,7 @@ public:
 	int board[BSIZE][BSIZE];  // 2D Board array
 	int turn; // Keep track of number of turns
 	int score;
+	int status;		//0: Normal, 1: Failed, 2: Success
 public:
 	Game();
 	
@@ -35,6 +36,8 @@ public:
 
 	// Checks if there exist 2048 tile on the board
 	bool check_win_status();
+
+	bool check_fail_status();
 
 	// Getter
 	int get_score();
