@@ -1,10 +1,19 @@
 #pragma once
 
+#include <iostream>
+
 #include "ofMain.h"
+#include "game.h"
 
 class ofApp : public ofBaseApp{
 
 	public:
+		Game game;
+		int nWidth;
+		int nHeight;
+		int nBoardSize;
+		ofRectangle rectBoard;
+
 		void setup();
 		void update();
 		void draw();
