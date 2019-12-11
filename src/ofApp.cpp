@@ -86,7 +86,11 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-	cout << key << endl;
+	if (key == 57357) key = 119;
+	if (key == 57359) key = 115;
+	if (key == 57356) key = 97;
+	if (key == 57358) key = 100;
+
 	char input = key;
 	game.step(input);
 }
