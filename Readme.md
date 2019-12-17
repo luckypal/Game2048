@@ -5,7 +5,7 @@
 2. Visual Studio 2019
 
 ## Screenshots
-<img src="screenshots/0.png" width="480"> <img src="screenshots/1.png" width="480"> <img src="screenshots/2.png" width="480">
+<img src="screenshots/0.png" width="320"> <img src="screenshots/1.png" width="320"> <img src="screenshots/2.png" width="320">
 
 ## How to run project
 - Download Open Frameworks vs 2017 and link with it.
